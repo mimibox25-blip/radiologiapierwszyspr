@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Wiedzy EKG</title>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --accent-help: #f59e0b;
+            --accent-help-hover: #d97706;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --correct-text: #15803d;
+            --incorrect-bg: #fee2e2;
+            --incorrect-border: #ef4444;
+            --incorrect-text: #b91c1c;
+            --section-bg: #e0f2fe;
+            --section-text: #0369a1;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .section-header {
+            background-color: var(--section-bg);
+            color: var(--section-text);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 30px 0 15px 0;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .question-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 12px 0;
+        }
+
+        .option-item {
+            margin-bottom: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: var(--primary-color);
+        }
+
+        .option-label input[type="radio"] {
+            margin-top: 3px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        /* Option Feedback Styles */
+        .option-item.correct-answer .option-label {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
+            font-weight: 600;
+        }
+
+        .option-item.wrong-answer .option-label {
+            background-color: var(--incorrect-bg) !important;
+            border-color: var(--incorrect-border) !important;
+            color: var(--incorrect-text) !important;
+        }
+
+        .option-item.eliminated .option-label {
+            opacity: 0.4;
+            text-decoration: line-through;
+            background-color: #f1f5f9;
+            cursor: not-allowed;
+            border-color: #cbd5e1;
+        }
+
+        .help-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .help-btn {
+            background-color: var(--accent-help);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .help-btn:hover {
+            background-color: var(--accent-help-hover);
+        }
+
+        .help-btn:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #d97706;
+            font-style: italic;
+        }
+
+        .feedback-box {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: var(--correct-bg);
+            border: 1px solid var(--correct-border);
+            color: var(--correct-text);
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: var(--incorrect-bg);
+            border: 1px solid var(--incorrect-border);
+            color: var(--incorrect-text);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #f0f9ff;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #result h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .score-details {
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .score-highlight {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test Wiedzy z EKG</h1>
+    <form id="quiz-form">
+        <div id="quiz-container"></div>
+        <button type="button" class="submit-btn" onclick="calculateScore()">Zakończ test i zobacz pełny wynik</button>
+    </form>
+
+    <div id="result">
+        <h2>Wynik Testu</h2>
+        <div class="score-details">
+            Twój wynik to: <span id="score-val" class="score-highlight">0</span> / <span id="max-score-val">0</span> pkt
+        </div>
+        <p id="score-summary"></p>
+        <button type="button" class="submit-btn" style="width: auto; margin: 15px auto 0;" onclick="location.reload()">Rozwiąż ponownie</button>
+    </div>
+</div>
+
+<script>
+const quizSections = [
+    {
+        title: "CZĘŚĆ 1: DEFINICJE (Pojęcia)",
+        questions: [
+            {
+                id: 1,
+                question: "Co dokładnie oznacza pojęcie \"Załamek\" w EKG?",
+                options: [
+                    { text: "Fragment obejmujący co najmniej jeden odcinek i jeden odstęp.", correct: false },
+                    { text: "Wychylenie linii izoelektrycznej w zapisie EKG (w górę lub w dół), odpowiadające określonemu etapowi pobudzenia elektrycznego serca.", correct: true },
+                    { text: "Płaski fragment pomiędzy dwoma załamkami.", correct: false },
+                    { text: "Czas trwania pełnego cyklu pracy przedsionków i komór.", correct: false }
+                ]
+            },
+            {
+                id: 2,
+                question: "Co oznacza pojęcie \"Odcinek\" w EKG?",
+                options: [
+                    { text: "Część zapisu EKG pomiędzy dwoma załamkami, liczona od końca jednego załamka do początku następnego.", correct: true },
+                    { text: "Wychylenie linii izoelektrycznej wyłącznie w górę.", correct: false },
+                    { text: "Fragment łączący początek załamka P z końcem załamka T.", correct: false },
+                    { text: "Zbiór trzech sąsiadujących załamków.", correct: false }
+                ]
+            },
+            {
+                id: 3,
+                question: "Jaki przebieg ma zazwyczaj \"Odcinek\"?",
+                options: [
+                    { text: "Jest zawsze dodatni.", correct: false },
+                    { text: "Zwykle jest izoelektryczny (czyli „płaski”).", correct: true },
+                    { text: "Jest zawsze ujemny.", correct: false },
+                    { text: "Przyjmuje kształt dwufazowy we wszystkich odprowadzeniach.", correct: false }
+                ]
+            },
+            {
+                id: 4,
+                question: "Co oznacza pojęcie \"Odstęp\" w EKG?",
+                options: [
+                    { text: "Fragment obejmujący wyłącznie dwa odcinki bez załamków.", correct: false },
+                    { text: "Fragment EKG obejmujący co najmniej jeden załamek i odcinek, liczony od początku jednego załamka do początku lub końca innego.", correct: true },
+                    { text: "Wyłącznie odległość między dwoma szczytami R.", correct: false },
+                    { text: "Całkowite uniesienie ST powyżej 2mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 2: ZAŁAMEK P",
+        questions: [
+            {
+                id: 5,
+                question: "W których odprowadzeniach załamek P jest ZAWSZE DODATNI (I, II), ZAWSZE ujemny, a w których MOŻE być ujemny?",
+                options: [
+                    { text: "Zawsze ujemny w I; może być ujemny w II i aVR.", correct: false },
+                    { text: "Zawsze dodatni w I, II; Zawsze ujemny w aVR; może być ujemny w III i V1.", correct: true },
+                    { text: "Zawsze ujemny w V1; może być ujemny w V5 i V6.", correct: false },
+                    { text: "Zawsze ujemny w III; może być ujemny w aVL i aVF.", correct: false }
+                ]
+            },
+            {
+                id: 6,
+                question: "W których odprowadzeniach załamek P może być DWUFAZOWY?",
+                options: [
+                    { text: "W I, II i aVR.", correct: false },
+                    { text: "W V4, V5 i V6.", correct: false },
+                    { text: "W III, aVL i V1.", correct: true },
+                    { text: "Wyłącznie w II i aVF.", correct: false }
+                ]
+            },
+            {
+                id: 7,
+                question: "Ile wynosi prawidłowy czas trwania załamka P?",
+                options: [
+                    { text: "< 0,04 s.", correct: false },
+                    { text: "0,04 s – 0,12 s.", correct: true },
+                    { text: "0,12 s – 0,16 s.", correct: false },
+                    { text: "0,06 s – 0,10 s.", correct: false }
+                ]
+            },
+            {
+                id: 8,
+                question: "Jaka jest maksymalna dopuszczalna amplituda załamka P w odprowadzeniach KOŃCZYNOWYCH?",
+                options: [
+                    { text: "< 2,5 mm.", correct: true },
+                    { text: "< 3 mm.", correct: false },
+                    { text: "< 2 mm.", correct: false },
+                    { text: "< 8 mm.", correct: false }
+                ]
+            },
+            {
+                id: 9,
+                question: "Jaka jest maksymalna dopuszczalna amplituda załamka P w odprowadzeniach PRZEDSERCOWYCH?",
+                options: [
+                    { text: "< 2,5 mm.", correct: false },
+                    { text: "< 3 mm.", correct: true },
+                    { text: "< 7 mm.", correct: false },
+                    { text: "< 20 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 3: ZAŁAMEK Q",
+        questions: [
+            {
+                id: 10,
+                question: "W których odprowadzeniach załamek Q NIE występuje?",
+                options: [
+                    { text: "W II i aVL.", correct: false },
+                    { text: "W V1 i V2.", correct: true },
+                    { text: "W V5 i V6.", correct: false },
+                    { text: "W I i aVR.", correct: false }
+                ]
+            },
+            {
+                id: 11,
+                question: "W których odprowadzeniach stwierdza się obecność załamka Q?",
+                options: [
+                    { text: "W I, III, aVR i V1.", correct: false },
+                    { text: "W II, aVL, V5 i V6.", correct: true },
+                    { text: "W V1, V2, V3 i V4.", correct: false },
+                    { text: "W I, II, III i aVF.", correct: false }
+                ]
+            },
+            {
+                id: 12,
+                question: "Ile wynosi prawidłowy czas trwania załamka Q?",
+                options: [
+                    { text: "< 0,04 s.", correct: true },
+                    { text: "0,04 s – 0,10 s.", correct: false },
+                    { text: "0,06 s – 0,10 s.", correct: false },
+                    { text: "< 0,40 s.", correct: false }
+                ]
+            },
+            {
+                id: 13,
+                question: "Jaka jest dopuszczalna amplituda załamka Q?",
+                options: [
+                    { text: "< 2 mm.", correct: true },
+                    { text: "< 3 mm.", correct: false },
+                    { text: "< 8 mm.", correct: false },
+                    { text: "< 2,5 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 4: ZAŁAMEK R",
+        questions: [
+            {
+                id: 14,
+                question: "Jaką polaryzację (kierunek wychylenia) przyjmuje załamek R?",
+                options: [
+                    { text: "Może być dodatni lub ujemny.", correct: false },
+                    { text: "Tylko dodatni.", correct: true },
+                    { text: "Tylko ujemny.", correct: false },
+                    { text: "Zawsze dwufazowy.", correct: false }
+                ]
+            },
+            {
+                id: 15,
+                question: "Jaka jest maksymalna amplituda załamka R w odprowadzeniach I, II, III oraz aVF?",
+                options: [
+                    { text: "< 8 mm.", correct: false },
+                    { text: "< do 20 mm.", correct: true },
+                    { text: "< 26 mm.", correct: false },
+                    { text: "< 2,5 mm.", correct: false }
+                ]
+            },
+            {
+                id: 16,
+                question: "Jaka jest maksymalna amplituda załamka R w odprowadzeniach V5 i V6?",
+                options: [
+                    { text: "< 20 mm.", correct: false },
+                    { text: "< 26 mm.", correct: true },
+                    { text: "< 8 mm.", correct: false },
+                    { text: "< 24 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 5: ZAŁAMEK S",
+        questions: [
+            {
+                id: 17,
+                question: "Jaką polaryzację (kierunek wychylenia) przyjmuje załamek S?",
+                options: [
+                    { text: "Tylko ujemny.", correct: true },
+                    { text: "Tylko dodatni.", correct: false },
+                    { text: "Może być dwufazowy.", correct: false },
+                    { text: "Zależną od odprowadzenia (dodatni lub ujemny).", correct: false }
+                ]
+            },
+            {
+                id: 18,
+                question: "W których odprowadzeniach może wystąpić głęboki załamek S i jaka jest jego norma punktowa?",
+                options: [
+                    { text: "W V5 i V6; < 26 mm.", correct: false },
+                    { text: "W I i II; < 8 mm.", correct: true },
+                    { text: "W III i aVF; < 20 mm.", correct: false },
+                    { text: "W V1 i V2; < 3 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 6: ZESPÓŁ QRS",
+        questions: [
+            {
+                id: 19,
+                question: "Ile wynosi prawidłowy czas trwania zespołu QRS?",
+                options: [
+                    { text: "0,04 s – 0,10 s.", correct: false },
+                    { text: "0,06 s – 0,10 s (a nawet 0,12 s).", correct: true },
+                    { text: "0,12 s – 0,20 s.", correct: false },
+                    { text: "< 0,04 s.", correct: false }
+                ]
+            },
+            {
+                id: 20,
+                question: "Jaka jest dopuszczalna norma sumarycznej amplitudy (R+S) zespołu QRS w odprowadzeniach KOŃCZYNOWYCH?",
+                options: [
+                    { text: "2,5 mm – 5 mm.", correct: false },
+                    { text: "5 mm – 24 mm.", correct: true },
+                    { text: "8 mm – 24 mm.", correct: false },
+                    { text: "do 20 mm.", correct: false }
+                ]
+            },
+            {
+                id: 21,
+                question: "Jaka jest dopuszczalna norma sumarycznej amplitudy (R+S) zespołu QRS w odprowadzeniach PRZEDSERCOWYCH?",
+                options: [
+                    { text: "5 mm – 24 mm.", correct: false },
+                    { text: "8 mm – 24 mm.", correct: true },
+                    { text: "< 26 mm.", correct: false },
+                    { text: "< 8 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 7: ZAŁAMEK T",
+        questions: [
+            {
+                id: 22,
+                question: "Z czym zazwyczaj jest zgodny załamek T?",
+                options: [
+                    { text: "Z osią załamka P.", correct: false },
+                    { text: "Z największym wychyleniem zespołu QRS.", correct: true },
+                    { text: "Z kierunkiem załamka U.", correct: false },
+                    { text: "Z odcinkiem PQ.", correct: false }
+                ]
+            },
+            {
+                id: 23,
+                question: "W których odprowadzeniach załamek T jest ZAWSZE dodatni, ZAWSZE ujemny oraz PRZEWAŻNIE dodatni?",
+                options: [
+                    { text: "Zawsze dodatni w II; Zawsze ujemny w I; Przeważnie dodatni w aVR.", correct: false },
+                    { text: "Zawsze dodatni w I; Zawsze ujemny w aVR; Przeważnie dodatni w II i aVF.", correct: true },
+                    { text: "Zawsze dodatni w aVF; Zawsze ujemny w III; Przeważnie dodatni w V1.", correct: false },
+                    { text: "Zawsze dodatni w V5; Zawsze ujemny w V1; Przeważnie dodatni w I.", correct: false }
+                ]
+            },
+            {
+                id: 24,
+                question: "Jaki może być załamek T w odprowadzeniu III?",
+                options: [
+                    { text: "Tylko dodatni.", correct: false },
+                    { text: "Tylko ujemny.", correct: false },
+                    { text: "Może być dodatni, ujemny lub dwufazowy.", correct: true },
+                    { text: "Załamek T nigdy nie występuje w III.", correct: false }
+                ]
+            },
+            {
+                id: 25,
+                question: "Jaki kształt ma prawidłowy załamek T?",
+                options: [
+                    { text: "Zaostrzony, symetryczny, wąski.", correct: false },
+                    { text: "Kopulasty, kopnięty w prawo, niesymetryczny.", correct: true },
+                    { text: "Płaski, ujemny, kwadratowy.", correct: false },
+                    { text: "Szpiczasty, kopnięty w lewo, symetryczny.", correct: false }
+                ]
+            },
+            {
+                id: 26,
+                question: "Ile wynosi prawidłowy czas trwania załamka T?",
+                options: [
+                    { text: "0,04 s – 0,10 s.", correct: false },
+                    { text: "0,06 s – 0,10 s.", correct: false },
+                    { text: "0,12 s – 0,16 s.", correct: true },
+                    { text: "0,12 s – 0,20 s.", correct: false }
+                ]
+            },
+            {
+                id: 27,
+                question: "Jaka jest prawidłowa amplituda załamka T?",
+                options: [
+                    { text: "> 2 mm (z wyjątkiem III), < 7 mm.", correct: true },
+                    { text: "< 2,5 mm w kończynowych.", correct: false },
+                    { text: "> 7 mm we wszystkich odprowadzeniach.", correct: false },
+                    { text: "< 2 mm w V5 i V6.", correct: false }
+                ]
+            },
+            {
+                id: 28,
+                question: "Czym charakteryzuje się załamek T \"wieńcowy\"?",
+                options: [
+                    { text: "Jest dwufazowy i asymetryczny.", correct: false },
+                    { text: "Jest ujemny, zaostrzony, symetryczny LUB dodatni, wysoki, symetryczny.", correct: true },
+                    { text: "Jest płaski z amplitudą < 0,5 mm.", correct: false },
+                    { text: "Jest kopnięty w prawo o czasie > 0,20 s.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 8: ZAŁAMEK U",
+        questions: [
+            {
+                id: 29,
+                question: "Czy załamek U występuje w każdym zapisie EKG?",
+                options: [
+                    { text: "Tak, występuje zawsze.", correct: false },
+                    { text: "Nie zawsze występuje.", correct: true },
+                    { text: "Występuje tylko u osób z tętnowskazem > 100/min.", correct: false },
+                    { text: "Występuje wyłącznie w odprowadzeniach przedsercowych.", correct: false }
+                ]
+            },
+            {
+                id: 30,
+                question: "W których odprowadzeniach załamek U jest ZAWSZE dodatni?",
+                options: [
+                    { text: "W I i II.", correct: true },
+                    { text: "W aVR i V1.", correct: false },
+                    { text: "W III i aVL.", correct: false },
+                    { text: "W V5 i V6.", correct: false }
+                ]
+            },
+            {
+                id: 31,
+                question: "W których odprowadzeniach załamek U może być UJEMNY i ile wynosi wtedy jego amplituda?",
+                options: [
+                    { text: "W III i aVF; około 50% amplitudy załamka T.", correct: false },
+                    { text: "W aVR oraz V1; około 10% amplitudy załamka T (czyli 2mm w kończynówkach).", correct: true },
+                    { text: "W I i II; wynosi dokładnie 3 mm.", correct: false },
+                    { text: "W V5 i V6; wynosi < 0,5 mm.", correct: false }
+                ]
+            },
+            {
+                id: 32,
+                question: "Jaka jest maksymalna ogólna amplituda załamka U?",
+                options: [
+                    { text: "< 2,5 mm.", correct: false },
+                    { text: "< 3 mm.", correct: true },
+                    { text: "< 7 mm.", correct: false },
+                    { text: "< 1 mm.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 9: ODCINEK PQ (PR)",
+        questions: [
+            {
+                id: 33,
+                question: "Od którego do którego punktu mierzymy ODCINEK PQ (PR)?",
+                options: [
+                    { text: "Od początku załamka P do pierwszego załamka QRS.", correct: false },
+                    { text: "Od końca załamka P do początku załamka Q (lub R).", correct: true },
+                    { text: "Od szczytu załamka P do szczytu załamka R.", correct: false },
+                    { text: "Od końca załamka Q do początku załamka S.", correct: false }
+                ]
+            },
+            {
+                id: 34,
+                question: "Ile wynosi czas trwania ODCINKA PQ (PR)?",
+                options: [
+                    { text: "0,04 s – 0,10 s.", correct: true },
+                    { text: "0,12 s – 0,20 s.", correct: false },
+                    { text: "0,06 s – 0,10 s.", correct: false },
+                    { text: "< 0,04 s.", correct: false }
+                ]
+            },
+            {
+                id: 35,
+                question: "Jakie znaczenie ma linia ODCINKA PQ w analizie EKG?",
+                options: [
+                    { text: "Służy do obliczania akcji komór.", correct: false },
+                    { text: "Przebiega w linii izoelektrycznej (zerowej) i jest poziomem odniesienia dla oceny uniesienia lub obniżenia odcinka ST.", correct: true },
+                    { text: "Wyznacza czas trwania skurczu komór.", correct: false },
+                    { text: "Określa wysokość załamka T.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 10: ODCINEK ST",
+        questions: [
+            {
+                id: 36,
+                question: "Od którego do którego punktu mierzymy ODCINEK ST?",
+                options: [
+                    { text: "Od początku zespołu QRS do końca T.", correct: false },
+                    { text: "Rozpoczyna się od końca załamka S i kończy na początku załamka T.", correct: true },
+                    { text: "Od końca załamka T do początku następnego P.", correct: false },
+                    { text: "Od szczytu S do szczytu T.", correct: false }
+                ]
+            },
+            {
+                id: 37,
+                question: "W których odprowadzeniach skośne do góry uniesienie ST może być uznawane za NORMĘ?",
+                options: [
+                    { text: "W II i III.", correct: false },
+                    { text: "W V1 i V2.", correct: true },
+                    { text: "W aVR i aVL.", correct: false },
+                    { text: "W V5 i V6.", correct: false }
+                ]
+            },
+            {
+                id: 38,
+                question: "Jaka jest maksymalna norma uniesienia odcinka ST w odprowadzeniach II i III?",
+                options: [
+                    { text: "< 1 mm.", correct: true },
+                    { text: "< 2 mm.", correct: false },
+                    { text: "< 0,5 mm.", correct: false },
+                    { text: "< 3 mm.", correct: false }
+                ]
+            },
+            {
+                id: 39,
+                question: "Jaka jest maksymalna norma uniesienia odcinka ST w odprowadzeniach od V1 do V4?",
+                options: [
+                    { text: "< 1 mm.", correct: false },
+                    { text: "< 2 mm.", correct: true },
+                    { text: "< 0,5 mm.", correct: false },
+                    { text: "< 2,5 mm.", correct: false }
+                ]
+            },
+            {
+                id: 40,
+                question: "Jaka jest dopuszczalna norma OBNIŻENIA odcinka ST?",
+                options: [
+                    { text: "< 1 mm.", correct: false },
+                    { text: "< 0,5 mm.", correct: true },
+                    { text: "< 2 mm.", correct: false },
+                    { text: "Obniżenie jest niedopuszczalne w żadnej wartości.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 11: ODSTĘPY (PQ, QT, RR, PP)",
+        questions: [
+            {
+                id: 41,
+                question: "Od jakiego punktu mierzymy ODSTĘP PQ (PR) i ile wynosi jego czas trwania?",
+                options: [
+                    { text: "Od końca P do początku Q; czas: 0,04 s – 0,10 s.", correct: false },
+                    { text: "Od początku załamka P do pierwszego załamka zespołu QRS; czas: 0,12 s – 0,20 s.", correct: true },
+                    { text: "Od szczytu P do końca S; czas: 0,06 s – 0,10 s.", correct: false },
+                    { text: "Od początku Q do końca T; czas: < 0,40 s.", correct: false }
+                ]
+            },
+            {
+                id: 42,
+                question: "Jak mierzony jest ODSTĘP QT, co wyraża i ile wynosi jego czas trwania?",
+                options: [
+                    { text: "Od początku QRS do końca załamka T; miara czasu trwania skurczu elektrycznego komór; czas < 0,40 s.", correct: true },
+                    { text: "Od końca Q do początku T; miara skurczu przedsionków; czas 0,12 s – 0,20 s.", correct: false },
+                    { text: "Od początku P do końca T; miara pełnego cyklu; czas < 0,16 s.", correct: false },
+                    { text: "Od szczytu R do szczytu T; miara odcinka izoelektrycznego; czas 0,04 s – 0,10 s.", correct: false }
+                ]
+            },
+            {
+                id: 43,
+                question: "Co mierzy ODSTĘP RR, jaki jest wzór na częstotliwość rytmu komór oraz jaka jest norma różnicy między dwoma RR w rytmie zatokowym?",
+                options: [
+                    { text: "Czas między szczytami R; wzór: 60/RR[s]; różnica między sąsiednimi RR < 0,16 s.", correct: true },
+                    { text: "Czas trwania zespołu QRS; wzór: RR[s]/60; różnica między sąsiednimi RR < 0,04 s.", correct: false },
+                    { text: "Odległość od P do R; wzór: 100/RR[s]; różnica między sąsiednimi RR < 0,12 s.", correct: false },
+                    { text: "Czas skurczu przedsionków; wzór: 60 x RR[s]; różnica między sąsiednimi RR < 0,20 s.", correct: false }
+                ]
+            },
+            {
+                id: 44,
+                question: "Co mierzy ODSTĘP PP, jaki jest wzór na częstotliwość przedsionków i jak ma się czas P-P do R-R?",
+                options: [
+                    { text: "Czas między dwoma szczytami sąsiednich P; wzór: 60/PP[s]; czasy P-P oraz R-R powinny być jednakowe.", correct: true },
+                    { text: "Czas trwania załamka P; wzór: PP[s]/60; P-P powinno być o 0,04 s krótsze od R-R.", correct: false },
+                    { text: "Czas skurczu komór; wzór: 100/PP[s]; P-P jest zawsze 2 razy dłuższe od R-R.", correct: false },
+                    { text: "Czas trwania odcinka PQ; wzór: 60 x PP[s]; brak relacji z R-R.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        title: "CZĘŚĆ 12: ELEKTRODY I ODPROWADZENIA",
+        questions: [
+            {
+                id: 45,
+                question: "Jaki kolor przypisany jest do poszczególnych kończyn przy zakładaniu elektrod klamrowych?",
+                options: [
+                    { text: "Czerwona – lewa ręka, Żółta – prawa ręka, Zielona – prawa noga, Czarna – lewa noga.", correct: false },
+                    { text: "Czerwona – prawa ręka, Żółta – lewa ręka, Zielona – lewa noga, Czarna – prawa noga (ziemia).", correct: true },
+                    { text: "Czerwona – prawa noga, Żółta – lewa noga, Zielona – prawa ręka, Czarna – lewa ręka.", correct: false },
+                    { text: "Czerwona – lewa noga, Żółta – prawa noga, Zielona – lewa ręka, Czarna – prawa ręka.", correct: false }
+                ]
+            },
+            {
+                id: 46,
+                question: "Gdzie dokładnie umieszcza się elektrody V1 oraz V2 na klatce piersiowej?",
+                options: [
+                    { text: "W II przestrzeni międzyżebrowej przy brzegu mostka (V1 po prawej, V2 po lewej).", correct: false },
+                    { text: "W IV przestrzeni międzyżebrowej przy brzegu mostka (V1 po prawej stronie, V2 po lewej stronie).", correct: true },
+                    { text: "W V przestrzeni międzyżebrowej w linii środkowo-obojczykowej.", correct: false },
+                    { text: "W III przestrzeni międzyżebrowej po obu stronach mostka.", correct: false }
+                ]
+            },
+            {
+                id: 47,
+                question: "Jak prawidłowo wyznacza się pozycję dla elektrod V3 i V4?",
+                options: [
+                    { text: "V3 nakłada się w V przestrzeni międzyżebrowej, a V4 w połowie drogi między V2 a V3.", correct: false },
+                    { text: "V4 nakłada się w V przestrzeni międzyżebrowej w linii środkowo-obojczykowej lewej, a V3 w połowie drogi między V2 a V4.", correct: true },
+                    { text: "V3 i V4 nakłada się w tej samej linii pachowej przedniej.", correct: false },
+                    { text: "V4 nakłada się w IV przestrzeni międzyżebrowej, a V3 na wyrostku mieczykowatym.", correct: false }
+                ]
+            },
+            {
+                id: 48,
+                question: "Gdzie umieszcza się elektrody V5 oraz V6?",
+                options: [
+                    { text: "W IV przestrzeni międzyżebrowej w linii pachowej przedniej (V5) i środkowej (V6).", correct: false },
+                    { text: "W V przestrzeni międzyżebrowej: V5 w linii pachowej przedniej lewej, V6 w linii pachowej środkowej lewej.", correct: true },
+                    { text: "Na wysokości koniuszka serca bez względu na przestrzenie międzyżebrowe.", correct: false },
+                    { text: "W V przestrzeni międzyżebrowej w linii kręgosłupowej (V5) i łopatkowej (V6).", correct: false }
+                ]
+            }
+        ]
+    }
+];
+
+// Flat list of all questions for logic processing
+const allQuestions = [];
+quizSections.forEach(section => {
+    section.questions.forEach(q => allQuestions.push(q));
+});
+
+const helpUsed = {};
+const answeredQuestions = {};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+
+    quizSections.forEach((section) => {
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'section-header';
+        sectionHeader.textContent = section.title;
+        container.appendChild(sectionHeader);
+
+        section.questions.forEach((q) => {
+            helpUsed[q.id] = false;
+            answeredQuestions[q.id] = false;
+
+            const shuffledOptions = shuffleArray(q.options);
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${q.id}`;
+
+            let optionsHTML = '';
+            shuffledOptions.forEach((opt, optIndex) => {
+                optionsHTML += `
+                    <li class="option-item" id="opt-item-${q.id}-${optIndex}">
+                        <label class="option-label">
+                            <input type="radio" name="q${q.id}" value="${opt.correct}" data-opt-id="${optIndex}" onchange="handleSelectOption(${q.id}, this)">
+                            <span>${escapeHtml(opt.text)}</span>
+                        </label>
+                    </li>
+                `;
+            });
+
+            const correctOpt = q.options.find(o => o.correct);
+
+            card.innerHTML = `
+                <div class="question-title">Pytanie ${q.id}. ${escapeHtml(q.question)}</div>
+                <ul class="options-list" id="options-list-${q.id}">
+                    ${optionsHTML}
+                </ul>
+                <div class="help-container">
+                    <button type="button" class="help-btn" id="help-btn-${q.id}" onclick="useHelp(${q.id})">
+                        💡 Pomóż (Odrzuć 1 błędną)
+                    </button>
+                    <span class="help-text" id="help-text-${q.id}"></span>
+                </div>
+                <div class="feedback-box" id="feedback-${q.id}">
+                    <div id="feedback-msg-${q.id}"></div>
+                    <div style="margin-top: 5px;"><strong>Prawidłowa odpowiedź:</strong> ${escapeHtml(correctOpt.text)}</div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    });
+}
+
+function handleSelectOption(questionId, inputElement) {
+    answeredQuestions[questionId] = true;
+
+    const isCorrect = inputElement.value === 'true';
+    const list = document.getElementById(`options-list-${questionId}`);
+    const items = list.querySelectorAll('.option-item');
+    const feedbackBox = document.getElementById(`feedback-${questionId}`);
+    const feedbackMsg = document.getElementById(`feedback-msg-${questionId}`);
+
+    // Lock all inputs for this question to prevent changing answer
+    items.forEach(item => {
+        const inp = item.querySelector('input');
+        inp.disabled = true;
+
+        if (inp.value === 'true') {
+            item.classList.add('correct-answer');
+        }
+    });
+
+    if (!isCorrect) {
+        const selectedItem = inputElement.closest('.option-item');
+        selectedItem.classList.add('wrong-answer');
+        feedbackBox.className = 'feedback-box incorrect';
+        feedbackMsg.innerHTML = '❌ <strong>Nieprawidłowa odpowiedź!</strong>';
+    } else {
+        feedbackBox.className = 'feedback-box correct';
+        feedbackMsg.innerHTML = '✅ <strong>Prawidłowa odpowiedź!</strong>';
+    }
+
+    // Disable help button after answering
+    const helpBtn = document.getElementById(`help-btn-${questionId}`);
+    if (helpBtn) helpBtn.disabled = true;
+}
+
+function useHelp(questionId) {
+    if (helpUsed[questionId] || answeredQuestions[questionId]) return;
+
+    const list = document.getElementById(`options-list-${questionId}`);
+    const items = list.querySelectorAll('.option-item');
+    const incorrectItems = [];
+
+    items.forEach(item => {
+        const input = item.querySelector('input');
+        if (input.value === 'false' && !item.classList.contains('eliminated')) {
+            incorrectItems.push(item);
+        }
+    });
+
+    if (incorrectItems.length > 0) {
+        const randomIncorrect = incorrectItems[Math.floor(Math.random() * incorrectItems.length)];
+        randomIncorrect.classList.add('eliminated');
+        const input = randomIncorrect.querySelector('input');
+        input.disabled = true;
+
+        helpUsed[questionId] = true;
+
+        const btn = document.getElementById(`help-btn-${questionId}`);
+        btn.disabled = true;
+
+        const helpText = document.getElementById(`help-text-${questionId}`);
+        helpText.textContent = "Użyto pomocy (-0.5 pkt w przypadku poprawnej odpowiedzi)";
+    }
+}
+
+function calculateScore() {
+    let totalScore = 0;
+    const maxScore = allQuestions.length;
+    let answeredCount = 0;
+
+    allQuestions.forEach(q => {
+        const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+
+        if (selected) {
+            answeredCount++;
+            const isCorrect = selected.value === 'true';
+
+            if (isCorrect) {
+                if (helpUsed[q.id]) {
+                    totalScore += 0.5;
+                } else {
+                    totalScore += 1.0;
+                }
+            }
+        }
+    });
+
+    if (answeredCount < allQuestions.length) {
+        if (!confirm(`Odpowiedziałeś na ${answeredCount} z ${allQuestions.length} pytań. Czy na pewno chcesz zakończyć?`)) {
+            return;
+        }
+    }
+
+    document.getElementById('score-val').textContent = totalScore;
+    document.getElementById('max-score-val').textContent = maxScore;
+
+    const percent = Math.round((totalScore / maxScore) * 100);
+    document.getElementById('score-summary').textContent = `Twój wynik procentowy to: ${percent}%. Wszystkie pytania mają oznaczone prawidłowe odpowiedzi.`;
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
