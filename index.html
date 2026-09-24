@@ -3,806 +3,622 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Wiedzy EKG</title>
+    <title>Test z Radioterapii - Kompletny Kurs</title>
     <style>
         :root {
-            --primary-color: #0284c7;
-            --primary-hover: #0369a1;
-            --bg-color: #f8fafc;
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent-color: #0284c7;
+            --success-color: #10b981;
+            --success-bg: #ecfdf5;
+            --danger-color: #ef4444;
+            --danger-bg: #fef2f2;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
-            --text-color: #1e293b;
+            --text-main: #0f172a;
+            --text-muted: #475569;
             --border-color: #e2e8f0;
-            --accent-help: #f59e0b;
-            --accent-help-hover: #d97706;
-            --correct-bg: #dcfce7;
-            --correct-border: #22c55e;
-            --correct-text: #15803d;
-            --incorrect-bg: #fee2e2;
-            --incorrect-border: #ef4444;
-            --incorrect-text: #b91c1c;
-            --section-bg: #e0f2fe;
-            --section-text: #0369a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.5;
-            margin: 0;
-            padding: 20px 10px;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 15px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-            background: var(--card-bg);
-            padding: 25px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 25px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        h1 {
             text-align: center;
-            color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
             margin-bottom: 20px;
-            font-size: 2rem;
+        }
+
+        header h1 {
+            font-size: 24px;
             font-weight: 700;
-        }
-
-        .section-header {
-            background-color: var(--section-bg);
-            color: var(--section-text);
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin: 30px 0 15px 0;
-            border-left: 5px solid var(--primary-color);
-        }
-
-        .question-card {
-            background-color: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 20px;
-            transition: all 0.2s ease;
-        }
-
-        .question-title {
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 12px;
-            color: #0f172a;
-        }
-
-        .options-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0 0 12px 0;
-        }
-
-        .option-item {
             margin-bottom: 8px;
         }
 
-        .option-label {
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stats-panel {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
             display: flex;
-            align-items: flex-start;
-            padding: 10px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.15s, border-color 0.15s;
-        }
-
-        .option-label:hover {
-            background-color: #f1f5f9;
-            border-color: var(--primary-color);
-        }
-
-        .option-label input[type="radio"] {
-            margin-top: 3px;
-            margin-right: 12px;
-            cursor: pointer;
-        }
-
-        /* Option Feedback Styles */
-        .option-item.correct-answer .option-label {
-            background-color: var(--correct-bg) !important;
-            border-color: var(--correct-border) !important;
-            color: var(--correct-text) !important;
-            font-weight: 600;
-        }
-
-        .option-item.wrong-answer .option-label {
-            background-color: var(--incorrect-bg) !important;
-            border-color: var(--incorrect-border) !important;
-            color: var(--incorrect-text) !important;
-        }
-
-        .option-item.eliminated .option-label {
-            opacity: 0.4;
-            text-decoration: line-through;
-            background-color: #f1f5f9;
-            cursor: not-allowed;
-            border-color: #cbd5e1;
-        }
-
-        .help-container {
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .stat-item {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
             margin-top: 10px;
         }
 
-        .help-btn {
-            background-color: var(--accent-help);
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease;
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
         }
 
-        .help-btn:hover {
-            background-color: var(--accent-help-hover);
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease;
         }
 
-        .help-btn:disabled {
-            background-color: #cbd5e1;
-            cursor: not-allowed;
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
-        .help-text {
-            font-size: 0.85rem;
-            color: #d97706;
-            font-style: italic;
-        }
-
-        .feedback-box {
-            display: none;
-            margin-top: 12px;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-
-        .feedback-box.correct {
-            display: block;
-            background-color: var(--correct-bg);
-            border: 1px solid var(--correct-border);
-            color: var(--correct-text);
-        }
-
-        .feedback-box.incorrect {
-            display: block;
-            background-color: var(--incorrect-bg);
-            border: 1px solid var(--incorrect-border);
-            color: var(--incorrect-text);
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1.1rem;
+        .question-number {
+            background: #eff6ff;
+            color: var(--primary-light);
             font-weight: 700;
+            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .question-text {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 15px;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: #eff6ff;
+            border-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success-color) !important;
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .option-btn.incorrect {
+            background-color: var(--danger-bg) !important;
+            border-color: var(--danger-color) !important;
+            color: #991b1b;
+        }
+
+        .option-btn[disabled] {
+            cursor: default;
+        }
+
+        .explanation-box {
+            display: none;
+            margin-top: 16px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        .explanation-box.visible {
+            display: block;
+        }
+
+        .explanation-box.correct-style {
+            background-color: var(--success-bg);
+            border-left: 4px solid var(--success-color);
+            color: #064e3b;
+        }
+
+        .explanation-box.incorrect-style {
+            background-color: var(--danger-bg);
+            border-left: 4px solid var(--danger-color);
+            color: #7f1d1d;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reset-btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn-restart {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2);
+            transition: background 0.2s ease;
         }
 
-        .submit-btn:hover {
-            background-color: var(--primary-hover);
+        .btn-restart:hover {
+            background: var(--primary-light);
         }
 
-        #result {
-            display: none;
-            margin-top: 30px;
-            padding: 25px;
-            background-color: #f0f9ff;
-            border: 2px solid var(--primary-color);
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        #result h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .score-details {
-            font-size: 1.2rem;
-            margin: 15px 0;
-        }
-
-        .score-highlight {
-            font-weight: 800;
-            font-size: 1.6rem;
-            color: var(--primary-color);
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Test Wiedzy z EKG</h1>
-    <form id="quiz-form">
-        <div id="quiz-container"></div>
-        <button type="button" class="submit-btn" onclick="calculateScore()">Zakończ test i zobacz pełny wynik</button>
-    </form>
+    <header>
+        <h1>Test Wiedzy: Procedury i Podstawy Radioterapii</h1>
+        <p>Pełny zakres materiału: podstawy fizyczne, biologiczne, etapy procedur i klinika (35 pytań)</p>
+    </header>
 
-    <div id="result">
-        <h2>Wynik Testu</h2>
-        <div class="score-details">
-            Twój wynik to: <span id="score-val" class="score-highlight">0</span> / <span id="max-score-val">0</span> pkt
+    <div class="stats-panel">
+        <div class="stat-item">Odpowiedzi: <span id="answered-count" class="stat-value">0</span> / 35</div>
+        <div class="stat-item">Wynik: <span id="score-count" class="stat-value">0</span> / 35</div>
+        <div style="flex-grow: 1; margin-left: 20px;">
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
         </div>
-        <p id="score-summary"></p>
-        <button type="button" class="submit-btn" style="width: auto; margin: 15px auto 0;" onclick="location.reload()">Rozwiąż ponownie</button>
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <div class="reset-btn-container">
+        <button class="btn-restart" onclick="restartQuiz()">Rozpocznij test od nowa (Ponowne losowanie)</button>
     </div>
 </div>
 
 <script>
-const quizSections = [
+const quizData = [
     {
-        title: "CZĘŚĆ 1: DEFINICJE (Pojęcia)",
-        questions: [
-            {
-                id: 1,
-                question: "Co dokładnie oznacza pojęcie \"Załamek\" w EKG?",
-                options: [
-                    { text: "Fragment obejmujący co najmniej jeden odcinek i jeden odstęp.", correct: false },
-                    { text: "Wychylenie linii izoelektrycznej w zapisie EKG (w górę lub w dół), odpowiadające określonemu etapowi pobudzenia elektrycznego serca.", correct: true },
-                    { text: "Płaski fragment pomiędzy dwoma załamkami.", correct: false },
-                    { text: "Czas trwania pełnego cyklu pracy przedsionków i komór.", correct: false }
-                ]
-            },
-            {
-                id: 2,
-                question: "Co oznacza pojęcie \"Odcinek\" w EKG?",
-                options: [
-                    { text: "Część zapisu EKG pomiędzy dwoma załamkami, liczona od końca jednego załamka do początku następnego.", correct: true },
-                    { text: "Wychylenie linii izoelektrycznej wyłącznie w górę.", correct: false },
-                    { text: "Fragment łączący początek załamka P z końcem załamka T.", correct: false },
-                    { text: "Zbiór trzech sąsiadujących załamków.", correct: false }
-                ]
-            },
-            {
-                id: 3,
-                question: "Jaki przebieg ma zazwyczaj \"Odcinek\"?",
-                options: [
-                    { text: "Jest zawsze dodatni.", correct: false },
-                    { text: "Zwykle jest izoelektryczny (czyli „płaski”).", correct: true },
-                    { text: "Jest zawsze ujemny.", correct: false },
-                    { text: "Przyjmuje kształt dwufazowy we wszystkich odprowadzeniach.", correct: false }
-                ]
-            },
-            {
-                id: 4,
-                question: "Co oznacza pojęcie \"Odstęp\" w EKG?",
-                options: [
-                    { text: "Fragment obejmujący wyłącznie dwa odcinki bez załamków.", correct: false },
-                    { text: "Fragment EKG obejmujący co najmniej jeden załamek i odcinek, liczony od początku jednego załamka do początku lub końca innego.", correct: true },
-                    { text: "Wyłącznie odległość między dwoma szczytami R.", correct: false },
-                    { text: "Całkowite uniesienie ST powyżej 2mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Jak zdefiniowana jest radioterapia pod względem obszaru działania na organizm?",
+        options: [
+            { text: "Jako metoda miejscowego leczenia nowotworów złośliwych", correct: true },
+            { text: "Jako leczenie ogólnoustrojowe działające w całym krwioobiegu", correct: false },
+            { text: "Jako wyłącznie metoda wspomagająca bez efektu biologicznego", correct: false },
+            { text: "Jako zabieg chirurgiczny usuwający narząd w całości", correct: false }
+        ],
+        explanation: "Radioterapia to metoda MIEJSCOWEGO leczenia nowotworów złośliwych wykorzystująca energię promieniowania jonizującego (w przeciwieństwie np. do chemioterapii działającej ogólnoustrojowo)."
     },
     {
-        title: "CZĘŚĆ 2: ZAŁAMEK P",
-        questions: [
-            {
-                id: 5,
-                question: "W których odprowadzeniach załamek P jest ZAWSZE DODATNI (I, II), ZAWSZE ujemny, a w których MOŻE być ujemny?",
-                options: [
-                    { text: "Zawsze ujemny w I; może być ujemny w II i aVR.", correct: false },
-                    { text: "Zawsze dodatni w I, II; Zawsze ujemny w aVR; może być ujemny w III i V1.", correct: true },
-                    { text: "Zawsze ujemny w V1; może być ujemny w V5 i V6.", correct: false },
-                    { text: "Zawsze ujemny w III; może być ujemny w aVL i aVF.", correct: false }
-                ]
-            },
-            {
-                id: 6,
-                question: "W których odprowadzeniach załamek P może być DWUFAZOWY?",
-                options: [
-                    { text: "W I, II i aVR.", correct: false },
-                    { text: "W V4, V5 i V6.", correct: false },
-                    { text: "W III, aVL i V1.", correct: true },
-                    { text: "Wyłącznie w II i aVF.", correct: false }
-                ]
-            },
-            {
-                id: 7,
-                question: "Ile wynosi prawidłowy czas trwania załamka P?",
-                options: [
-                    { text: "< 0,04 s.", correct: false },
-                    { text: "0,04 s – 0,12 s.", correct: true },
-                    { text: "0,12 s – 0,16 s.", correct: false },
-                    { text: "0,06 s – 0,10 s.", correct: false }
-                ]
-            },
-            {
-                id: 8,
-                question: "Jaka jest maksymalna dopuszczalna amplituda załamka P w odprowadzeniach KOŃCZYNOWYCH?",
-                options: [
-                    { text: "< 2,5 mm.", correct: true },
-                    { text: "< 3 mm.", correct: false },
-                    { text: "< 2 mm.", correct: false },
-                    { text: "< 8 mm.", correct: false }
-                ]
-            },
-            {
-                id: 9,
-                question: "Jaka jest maksymalna dopuszczalna amplituda załamka P w odprowadzeniach PRZEDSERCOWYCH?",
-                options: [
-                    { text: "< 2,5 mm.", correct: false },
-                    { text: "< 3 mm.", correct: true },
-                    { text: "< 7 mm.", correct: false },
-                    { text: "< 20 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Jaki procent chorych na nowotwory złośliwe wymaga zastosowania radioterapii w trakcie leczenia?",
+        options: [
+            { text: "60%", correct: true },
+            { text: "22%", correct: false },
+            { text: "18%", correct: false },
+            { text: "5%", correct: false }
+        ],
+        explanation: "Zgodnie ze statystykami epidemiologicznymi przedstawionymi w materiale, aż 60% wszystkich chorych onkologicznie wymaga zastosowania radioterapii na pewnym etapie leczenia."
     },
     {
-        title: "CZĘŚĆ 3: ZAŁAMEK Q",
-        questions: [
-            {
-                id: 10,
-                question: "W których odprowadzeniach załamek Q NIE występuje?",
-                options: [
-                    { text: "W II i aVL.", correct: false },
-                    { text: "W V1 i V2.", correct: true },
-                    { text: "W V5 i V6.", correct: false },
-                    { text: "W I i aVR.", correct: false }
-                ]
-            },
-            {
-                id: 11,
-                question: "W których odprowadzeniach stwierdza się obecność załamka Q?",
-                options: [
-                    { text: "W I, III, aVR i V1.", correct: false },
-                    { text: "W II, aVL, V5 i V6.", correct: true },
-                    { text: "W V1, V2, V3 i V4.", correct: false },
-                    { text: "W I, II, III i aVF.", correct: false }
-                ]
-            },
-            {
-                id: 12,
-                question: "Ile wynosi prawidłowy czas trwania załamka Q?",
-                options: [
-                    { text: "< 0,04 s.", correct: true },
-                    { text: "0,04 s – 0,10 s.", correct: false },
-                    { text: "0,06 s – 0,10 s.", correct: false },
-                    { text: "< 0,40 s.", correct: false }
-                ]
-            },
-            {
-                id: 13,
-                question: "Jaka jest dopuszczalna amplituda załamka Q?",
-                options: [
-                    { text: "< 2 mm.", correct: true },
-                    { text: "< 3 mm.", correct: false },
-                    { text: "< 8 mm.", correct: false },
-                    { text: "< 2,5 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Jaki procent całkowitych wyleczeń onkologicznych uzyskujemy dzięki SAMODZIELNEJ radioterapii?",
+        options: [
+            { text: "18%", correct: true },
+            { text: "60%", correct: false },
+            { text: "22%", correct: false },
+            { text: "5%", correct: false }
+        ],
+        explanation: "Samodzielne leczenie napromienianiem odpowiada za 18% trwale wyleczonych chorych. Dla porównania: chirurgia daje 22%, a samodzielna chemioterapia 5% wyleczeń."
     },
     {
-        title: "CZĘŚĆ 4: ZAŁAMEK R",
-        questions: [
-            {
-                id: 14,
-                question: "Jaką polaryzację (kierunek wychylenia) przyjmuje załamek R?",
-                options: [
-                    { text: "Może być dodatni lub ujemny.", correct: false },
-                    { text: "Tylko dodatni.", correct: true },
-                    { text: "Tylko ujemny.", correct: false },
-                    { text: "Zawsze dwufazowy.", correct: false }
-                ]
-            },
-            {
-                id: 15,
-                question: "Jaka jest maksymalna amplituda załamka R w odprowadzeniach I, II, III oraz aVF?",
-                options: [
-                    { text: "< 8 mm.", correct: false },
-                    { text: "< do 20 mm.", correct: true },
-                    { text: "< 26 mm.", correct: false },
-                    { text: "< 2,5 mm.", correct: false }
-                ]
-            },
-            {
-                id: 16,
-                question: "Jaka jest maksymalna amplituda załamka R w odprowadzeniach V5 i V6?",
-                options: [
-                    { text: "< 20 mm.", correct: false },
-                    { text: "< 26 mm.", correct: true },
-                    { text: "< 8 mm.", correct: false },
-                    { text: "< 24 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Jaki procent wyleczeń w chorobach nowotworowych daje samodzielne leczenie CHIRURGICZNE?",
+        options: [
+            { text: "22%", correct: true },
+            { text: "60%", correct: false },
+            { text: "18%", correct: false },
+            { text: "5%", correct: false }
+        ],
+        explanation: "Chorzy wyleczeni z zastosowaniem wyłącznie samodzielnego leczenia chirurgicznego stanowią 22% wszystkich wyleczonych pacjentów onkologicznych."
     },
     {
-        title: "CZĘŚĆ 5: ZAŁAMEK S",
-        questions: [
-            {
-                id: 17,
-                question: "Jaką polaryzację (kierunek wychylenia) przyjmuje załamek S?",
-                options: [
-                    { text: "Tylko ujemny.", correct: true },
-                    { text: "Tylko dodatni.", correct: false },
-                    { text: "Może być dwufazowy.", correct: false },
-                    { text: "Zależną od odprowadzenia (dodatni lub ujemny).", correct: false }
-                ]
-            },
-            {
-                id: 18,
-                question: "W których odprowadzeniach może wystąpić głęboki załamek S i jaka jest jego norma punktowa?",
-                options: [
-                    { text: "W V5 i V6; < 26 mm.", correct: false },
-                    { text: "W I i II; < 8 mm.", correct: true },
-                    { text: "W III i aVF; < 20 mm.", correct: false },
-                    { text: "W V1 i V2; < 3 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Co odpowiada za 75% uszkodzeń komórkowych wywołanych promieniowaniem jonizującym?",
+        options: [
+            { text: "Mechanizm pośredni – radioliza wody i wolne rodniki OH•", correct: true },
+            { text: "Mechanizm bezpośredni – absorpcja fotonu w rdzeniu DNA", correct: false },
+            { text: "Termiczne uszkodzenie błony komórkowej przez fotony", correct: false },
+            { text: "Rozpad izotopów ciężkich wewnątrz jądra komórkowego", correct: false }
+        ],
+        explanation: "Mechanizm pośredni odpowiada za 75% uszkodzeń komórkowych. Polega na radiolizie wody i powstaniu wolnych rodników wodorotlenowych, które niszczą struktury komórkowe."
     },
     {
-        title: "CZĘŚĆ 6: ZESPÓŁ QRS",
-        questions: [
-            {
-                id: 19,
-                question: "Ile wynosi prawidłowy czas trwania zespołu QRS?",
-                options: [
-                    { text: "0,04 s – 0,10 s.", correct: false },
-                    { text: "0,06 s – 0,10 s (a nawet 0,12 s).", correct: true },
-                    { text: "0,12 s – 0,20 s.", correct: false },
-                    { text: "< 0,04 s.", correct: false }
-                ]
-            },
-            {
-                id: 20,
-                question: "Jaka jest dopuszczalna norma sumarycznej amplitudy (R+S) zespołu QRS w odprowadzeniach KOŃCZYNOWYCH?",
-                options: [
-                    { text: "2,5 mm – 5 mm.", correct: false },
-                    { text: "5 mm – 24 mm.", correct: true },
-                    { text: "8 mm – 24 mm.", correct: false },
-                    { text: "do 20 mm.", correct: false }
-                ]
-            },
-            {
-                id: 21,
-                question: "Jaka jest dopuszczalna norma sumarycznej amplitudy (R+S) zespołu QRS w odprowadzeniach PRZEDSERCOWYCH?",
-                options: [
-                    { text: "5 mm – 24 mm.", correct: false },
-                    { text: "8 mm – 24 mm.", correct: true },
-                    { text: "< 26 mm.", correct: false },
-                    { text: "< 8 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Na czym polega mechanizm BEZPOŚREDNI (efekt tarczy) i jaki procent uszkodzeń powoduje?",
+        options: [
+            { text: "Wywołuje 25% uszkodzeń poprzez bezpośrednie zniszczenie np. DNA wolnym elektronem", correct: true },
+            { text: "Wywołuje 75% uszkodzeń poprzez wytworzenie wody utlenionej w cytozolu", correct: false },
+            { text: "Wywołuje 50% uszkodzeń poprzez podgrzanie tkanek miękkich", correct: false },
+            { text: "Wywołuje 100% uszkodzeń w przypadku zastosowania promieniowania neutronowego", correct: false }
+        ],
+        explanation: "Mechanizm bezpośredni (efekt tarczy) wywołuje 25% uszkodzeń komórkowych. Polega na uszkodzeniu najważniejszych struktur (np. DNA) bezpośrednio przez wolny elektron powstały z absorpcji fotonu lub cząstki."
     },
     {
-        title: "CZĘŚĆ 7: ZAŁAMEK T",
-        questions: [
-            {
-                id: 22,
-                question: "Z czym zazwyczaj jest zgodny załamek T?",
-                options: [
-                    { text: "Z osią załamka P.", correct: false },
-                    { text: "Z największym wychyleniem zespołu QRS.", correct: true },
-                    { text: "Z kierunkiem załamka U.", correct: false },
-                    { text: "Z odcinkiem PQ.", correct: false }
-                ]
-            },
-            {
-                id: 23,
-                question: "W których odprowadzeniach załamek T jest ZAWSZE dodatni, ZAWSZE ujemny oraz PRZEWAŻNIE dodatni?",
-                options: [
-                    { text: "Zawsze dodatni w II; Zawsze ujemny w I; Przeważnie dodatni w aVR.", correct: false },
-                    { text: "Zawsze dodatni w I; Zawsze ujemny w aVR; Przeważnie dodatni w II i aVF.", correct: true },
-                    { text: "Zawsze dodatni w aVF; Zawsze ujemny w III; Przeważnie dodatni w V1.", correct: false },
-                    { text: "Zawsze dodatni w V5; Zawsze ujemny w V1; Przeważnie dodatni w I.", correct: false }
-                ]
-            },
-            {
-                id: 24,
-                question: "Jaki może być załamek T w odprowadzeniu III?",
-                options: [
-                    { text: "Tylko dodatni.", correct: false },
-                    { text: "Tylko ujemny.", correct: false },
-                    { text: "Może być dodatni, ujemny lub dwufazowy.", correct: true },
-                    { text: "Załamek T nigdy nie występuje w III.", correct: false }
-                ]
-            },
-            {
-                id: 25,
-                question: "Jaki kształt ma prawidłowy załamek T?",
-                options: [
-                    { text: "Zaostrzony, symetryczny, wąski.", correct: false },
-                    { text: "Kopulasty, kopnięty w prawo, niesymetryczny.", correct: true },
-                    { text: "Płaski, ujemny, kwadratowy.", correct: false },
-                    { text: "Szpiczasty, kopnięty w lewo, symetryczny.", correct: false }
-                ]
-            },
-            {
-                id: 26,
-                question: "Ile wynosi prawidłowy czas trwania załamka T?",
-                options: [
-                    { text: "0,04 s – 0,10 s.", correct: false },
-                    { text: "0,06 s – 0,10 s.", correct: false },
-                    { text: "0,12 s – 0,16 s.", correct: true },
-                    { text: "0,12 s – 0,20 s.", correct: false }
-                ]
-            },
-            {
-                id: 27,
-                question: "Jaka jest prawidłowa amplituda załamka T?",
-                options: [
-                    { text: "> 2 mm (z wyjątkiem III), < 7 mm.", correct: true },
-                    { text: "< 2,5 mm w kończynowych.", correct: false },
-                    { text: "> 7 mm we wszystkich odprowadzeniach.", correct: false },
-                    { text: "< 2 mm w V5 i V6.", correct: false }
-                ]
-            },
-            {
-                id: 28,
-                question: "Czym charakteryzuje się załamek T \"wieńcowy\"?",
-                options: [
-                    { text: "Jest dwufazowy i asymetryczny.", correct: false },
-                    { text: "Jest ujemny, zaostrzony, symetryczny LUB dodatni, wysoki, symetryczny.", correct: true },
-                    { text: "Jest płaski z amplitudą < 0,5 mm.", correct: false },
-                    { text: "Jest kopnięty w prawo o czasie > 0,20 s.", correct: false }
-                ]
-            }
-        ]
+        question: "Które z poniższych zaliczamy do promieniowania ELEKTROMAGNETYCZNEGO wykorzystywanego w radioterapii?",
+        options: [
+            { text: "Promieniowanie X oraz promieniowanie gamma (γ)", correct: true },
+            { text: "Strumień elektronów (e⁻) oraz protonów (p⁺)", correct: false },
+            { text: "Promieniowanie neutronowe (n) oraz cząstki alfa", correct: false },
+            { text: "Fale ultradźwiękowe o wyskokim natężeniu", correct: false }
+        ],
+        explanation: "Promieniowanie elektromagnetyczne jonizujące obejmuje kwanty promieniowania rentgenowskiego (X) oraz promieniowania gamma (γ). Elektrony, protony i neutrony to promieniowanie cząsteczkowe."
     },
     {
-        title: "CZĘŚĆ 8: ZAŁAMEK U",
-        questions: [
-            {
-                id: 29,
-                question: "Czy załamek U występuje w każdym zapisie EKG?",
-                options: [
-                    { text: "Tak, występuje zawsze.", correct: false },
-                    { text: "Nie zawsze występuje.", correct: true },
-                    { text: "Występuje tylko u osób z tętnowskazem > 100/min.", correct: false },
-                    { text: "Występuje wyłącznie w odprowadzeniach przedsercowych.", correct: false }
-                ]
-            },
-            {
-                id: 30,
-                question: "W których odprowadzeniach załamek U jest ZAWSZE dodatni?",
-                options: [
-                    { text: "W I i II.", correct: true },
-                    { text: "W aVR i V1.", correct: false },
-                    { text: "W III i aVL.", correct: false },
-                    { text: "W V5 i V6.", correct: false }
-                ]
-            },
-            {
-                id: 31,
-                question: "W których odprowadzeniach załamek U może być UJEMNY i ile wynosi wtedy jego amplituda?",
-                options: [
-                    { text: "W III i aVF; około 50% amplitudy załamka T.", correct: false },
-                    { text: "W aVR oraz V1; około 10% amplitudy załamka T (czyli 2mm w kończynówkach).", correct: true },
-                    { text: "W I i II; wynosi dokładnie 3 mm.", correct: false },
-                    { text: "W V5 i V6; wynosi < 0,5 mm.", correct: false }
-                ]
-            },
-            {
-                id: 32,
-                question: "Jaka jest maksymalna ogólna amplituda załamka U?",
-                options: [
-                    { text: "< 2,5 mm.", correct: false },
-                    { text: "< 3 mm.", correct: true },
-                    { text: "< 7 mm.", correct: false },
-                    { text: "< 1 mm.", correct: false }
-                ]
-            }
-        ]
+        question: "Do jakiej kategorii promieniowania zaliczamy elektrony (e⁻), protony (p⁺) i neutrony (n)?",
+        options: [
+            { text: "Promieniowanie cząsteczkowe", correct: true },
+            { text: "Promieniowanie elektromagnetyczne", correct: false },
+            { text: "Promieniowanie falowe niejonizujące", correct: false },
+            { text: "Promieniowanie podczerwone megawoltowe", correct: false }
+        ],
+        explanation: "Elektrony (e⁻), protony (p⁺) oraz neutrony (n) posiadają masę spoczynkową lub ładunek i zaliczają się do promieniowania cząsteczkowego (korpuskularnego)."
     },
     {
-        title: "CZĘŚĆ 9: ODCINEK PQ (PR)",
-        questions: [
-            {
-                id: 33,
-                question: "Od którego do którego punktu mierzymy ODCINEK PQ (PR)?",
-                options: [
-                    { text: "Od początku załamka P do pierwszego załamka QRS.", correct: false },
-                    { text: "Od końca załamka P do początku załamka Q (lub R).", correct: true },
-                    { text: "Od szczytu załamka P do szczytu załamka R.", correct: false },
-                    { text: "Od końca załamka Q do początku załamka S.", correct: false }
-                ]
-            },
-            {
-                id: 34,
-                question: "Ile wynosi czas trwania ODCINKA PQ (PR)?",
-                options: [
-                    { text: "0,04 s – 0,10 s.", correct: true },
-                    { text: "0,12 s – 0,20 s.", correct: false },
-                    { text: "0,06 s – 0,10 s.", correct: false },
-                    { text: "< 0,04 s.", correct: false }
-                ]
-            },
-            {
-                id: 35,
-                question: "Jakie znaczenie ma linia ODCINKA PQ w analizie EKG?",
-                options: [
-                    { text: "Służy do obliczania akcji komór.", correct: false },
-                    { text: "Przebiega w linii izoelektrycznej (zerowej) i jest poziomem odniesienia dla oceny uniesienia lub obniżenia odcinka ST.", correct: true },
-                    { text: "Wyznacza czas trwania skurczu komór.", correct: false },
-                    { text: "Określa wysokość załamka T.", correct: false }
-                ]
-            }
-        ]
+        question: "Jakie zjawiska fizyczne wykorzystuje się w radioterapii według materiału?",
+        options: [
+            { text: "Współoddziaływanie promieniowania X i γ z materią oraz rozpad promieniotwórczy", correct: true },
+            { text: "Indukcję elektromagnetyczną oraz rezonans paramagnetyczny", correct: false },
+            { text: "Piezoelektryczność oraz zjawisko Dopplera", correct: false },
+            { text: "Załamanie i odbicie światła laserowego w tkance", correct: false }
+        ],
+        explanation: "Wśród zjawisk fizycznych wykorzystywanych w radioterapii wymienia się współoddziaływanie promieniowania X i gamma z materią oraz rozpad promieniotwórczy pierwiastków."
     },
     {
-        title: "CZĘŚĆ 10: ODCINEK ST",
-        questions: [
-            {
-                id: 36,
-                question: "Od którego do którego punktu mierzymy ODCINEK ST?",
-                options: [
-                    { text: "Od początku zespołu QRS do końca T.", correct: false },
-                    { text: "Rozpoczyna się od końca załamka S i kończy na początku załamka T.", correct: true },
-                    { text: "Od końca załamka T do początku następnego P.", correct: false },
-                    { text: "Od szczytu S do szczytu T.", correct: false }
-                ]
-            },
-            {
-                id: 37,
-                question: "W których odprowadzeniach skośne do góry uniesienie ST może być uznawane za NORMĘ?",
-                options: [
-                    { text: "W II i III.", correct: false },
-                    { text: "W V1 i V2.", correct: true },
-                    { text: "W aVR i aVL.", correct: false },
-                    { text: "W V5 i V6.", correct: false }
-                ]
-            },
-            {
-                id: 38,
-                question: "Jaka jest maksymalna norma uniesienia odcinka ST w odprowadzeniach II i III?",
-                options: [
-                    { text: "< 1 mm.", correct: true },
-                    { text: "< 2 mm.", correct: false },
-                    { text: "< 0,5 mm.", correct: false },
-                    { text: "< 3 mm.", correct: false }
-                ]
-            },
-            {
-                id: 39,
-                question: "Jaka jest maksymalna norma uniesienia odcinka ST w odprowadzeniach od V1 do V4?",
-                options: [
-                    { text: "< 1 mm.", correct: false },
-                    { text: "< 2 mm.", correct: true },
-                    { text: "< 0,5 mm.", correct: false },
-                    { text: "< 2,5 mm.", correct: false }
-                ]
-            },
-            {
-                id: 40,
-                question: "Jaka jest dopuszczalna norma OBNIŻENIA odcinka ST?",
-                options: [
-                    { text: "< 1 mm.", correct: false },
-                    { text: "< 0,5 mm.", correct: true },
-                    { text: "< 2 mm.", correct: false },
-                    { text: "Obniżenie jest niedopuszczalne w żadnej wartości.", correct: false }
-                ]
-            }
-        ]
+        question: "Czym jest radioterapia NEOADJUWANTOWA w programie leczenia skojarzonego?",
+        options: [
+            { text: "Napromienianiem przedoperacyjnym (przed chirurgią)", correct: true },
+            { text: "Napromienianiem uzupełniającym wyłącznie po zabiegu operacyjnym", correct: false },
+            { text: "Leczeniem stosowanym wyłącznie w stanach terminalnych", correct: false },
+            { text: "Podawaniem promieniotwórczych izotopów drogą doustną", correct: false }
+        ],
+        explanation: "Sekwencja neoadjuwantowa polega na podaniu radioterapii PRZED planowanym zabiegiem chirurgicznym (np. w miejscowo zaawansowanym raku piersi, szyjki macicy, odbytnicy), co ułatwia lub umożliwia operację."
     },
     {
-        title: "CZĘŚĆ 11: ODSTĘPY (PQ, QT, RR, PP)",
-        questions: [
-            {
-                id: 41,
-                question: "Od jakiego punktu mierzymy ODSTĘP PQ (PR) i ile wynosi jego czas trwania?",
-                options: [
-                    { text: "Od końca P do początku Q; czas: 0,04 s – 0,10 s.", correct: false },
-                    { text: "Od początku załamka P do pierwszego załamka zespołu QRS; czas: 0,12 s – 0,20 s.", correct: true },
-                    { text: "Od szczytu P do końca S; czas: 0,06 s – 0,10 s.", correct: false },
-                    { text: "Od początku Q do końca T; czas: < 0,40 s.", correct: false }
-                ]
-            },
-            {
-                id: 42,
-                question: "Jak mierzony jest ODSTĘP QT, co wyraża i ile wynosi jego czas trwania?",
-                options: [
-                    { text: "Od początku QRS do końca załamka T; miara czasu trwania skurczu elektrycznego komór; czas < 0,40 s.", correct: true },
-                    { text: "Od końca Q do początku T; miara skurczu przedsionków; czas 0,12 s – 0,20 s.", correct: false },
-                    { text: "Od początku P do końca T; miara pełnego cyklu; czas < 0,16 s.", correct: false },
-                    { text: "Od szczytu R do szczytu T; miara odcinka izoelektrycznego; czas 0,04 s – 0,10 s.", correct: false }
-                ]
-            },
-            {
-                id: 43,
-                question: "Co mierzy ODSTĘP RR, jaki jest wzór na częstotliwość rytmu komór oraz jaka jest norma różnicy między dwoma RR w rytmie zatokowym?",
-                options: [
-                    { text: "Czas między szczytami R; wzór: 60/RR[s]; różnica między sąsiednimi RR < 0,16 s.", correct: true },
-                    { text: "Czas trwania zespołu QRS; wzór: RR[s]/60; różnica między sąsiednimi RR < 0,04 s.", correct: false },
-                    { text: "Odległość od P do R; wzór: 100/RR[s]; różnica między sąsiednimi RR < 0,12 s.", correct: false },
-                    { text: "Czas skurczu przedsionków; wzór: 60 x RR[s]; różnica między sąsiednimi RR < 0,20 s.", correct: false }
-                ]
-            },
-            {
-                id: 44,
-                question: "Co mierzy ODSTĘP PP, jaki jest wzór na częstotliwość przedsionków i jak ma się czas P-P do R-R?",
-                options: [
-                    { text: "Czas między dwoma szczytami sąsiednich P; wzór: 60/PP[s]; czasy P-P oraz R-R powinny być jednakowe.", correct: true },
-                    { text: "Czas trwania załamka P; wzór: PP[s]/60; P-P powinno być o 0,04 s krótsze od R-R.", correct: false },
-                    { text: "Czas skurczu komór; wzór: 100/PP[s]; P-P jest zawsze 2 razy dłuższe od R-R.", correct: false },
-                    { text: "Czas trwania odcinka PQ; wzór: 60 x PP[s]; brak relacji z R-R.", correct: false }
-                ]
-            }
-        ]
+        question: "Jaki jest główny cel radiochemioterapii JEDNOCZASOWEJ np. w zaawansowanym raku krtani?",
+        options: [
+            { text: "Zniszczenie nowotworu przy jednoczesnym zachowaniu narządu", correct: true },
+            { text: "Całkowite usunięcie narządu drogą skomplikowanej operacji", correct: false },
+            { text: "Zmniejszenie odczynów popromiennych skóry do zera", correct: false },
+            { text: "Uniknięcie konieczności wykonywania planu leczenia", correct: false }
+        ],
+        explanation: "Leczenie skojarzone (radiochemioterapia jednoczasowa lub naprzemienna) umożliwia skuteczne wyleczenie nowotworu bez konieczności okaleczającej resekcji chirurgicznej, zachowując narząd (np. krtań)."
     },
     {
-        title: "CZĘŚĆ 12: ELEKTRODY I ODPROWADZENIA",
-        questions: [
-            {
-                id: 45,
-                question: "Jaki kolor przypisany jest do poszczególnych kończyn przy zakładaniu elektrod klamrowych?",
-                options: [
-                    { text: "Czerwona – lewa ręka, Żółta – prawa ręka, Zielona – prawa noga, Czarna – lewa noga.", correct: false },
-                    { text: "Czerwona – prawa ręka, Żółta – lewa ręka, Zielona – lewa noga, Czarna – prawa noga (ziemia).", correct: true },
-                    { text: "Czerwona – prawa noga, Żółta – lewa noga, Zielona – prawa ręka, Czarna – lewa ręka.", correct: false },
-                    { text: "Czerwona – lewa noga, Żółta – prawa noga, Zielona – lewa ręka, Czarna – prawa ręka.", correct: false }
-                ]
-            },
-            {
-                id: 46,
-                question: "Gdzie dokładnie umieszcza się elektrody V1 oraz V2 na klatce piersiowej?",
-                options: [
-                    { text: "W II przestrzeni międzyżebrowej przy brzegu mostka (V1 po prawej, V2 po lewej).", correct: false },
-                    { text: "W IV przestrzeni międzyżebrowej przy brzegu mostka (V1 po prawej stronie, V2 po lewej stronie).", correct: true },
-                    { text: "W V przestrzeni międzyżebrowej w linii środkowo-obojczykowej.", correct: false },
-                    { text: "W III przestrzeni międzyżebrowej po obu stronach mostka.", correct: false }
-                ]
-            },
-            {
-                id: 47,
-                question: "Jak prawidłowo wyznacza się pozycję dla elektrod V3 i V4?",
-                options: [
-                    { text: "V3 nakłada się w V przestrzeni międzyżebrowej, a V4 w połowie drogi między V2 a V3.", correct: false },
-                    { text: "V4 nakłada się w V przestrzeni międzyżebrowej w linii środkowo-obojczykowej lewej, a V3 w połowie drogi między V2 a V4.", correct: true },
-                    { text: "V3 i V4 nakłada się w tej samej linii pachowej przedniej.", correct: false },
-                    { text: "V4 nakłada się w IV przestrzeni międzyżebrowej, a V3 na wyrostku mieczykowatym.", correct: false }
-                ]
-            },
-            {
-                id: 48,
-                question: "Gdzie umieszcza się elektrody V5 oraz V6?",
-                options: [
-                    { text: "W IV przestrzeni międzyżebrowej w linii pachowej przedniej (V5) i środkowej (V6).", correct: false },
-                    { text: "W V przestrzeni międzyżebrowej: V5 w linii pachowej przedniej lewej, V6 w linii pachowej środkowej lewej.", correct: true },
-                    { text: "Na wysokości koniuszka serca bez względu na przestrzenie międzyżebrowe.", correct: false },
-                    { text: "W V przestrzeni międzyżebrowej w linii kręgosłupowej (V5) i łopatkowej (V6).", correct: false }
-                ]
-            }
-        ]
+        question: "Czym charakteryzuje się radioterapia PALIATYWNA pod względem celu terapeutycznego?",
+        options: [
+            { text: "Zahamowaniem procesu, zmniejszeniem dolegliwości i przedłużeniem życia", correct: true },
+            { text: "Dążeniem do trwałego i całkowitego wyeliminowania guza", correct: false },
+            { text: "Stosowaniem wyłącznie dawek megawoltowych w 60 frakcjach", correct: false },
+            { text: "Całkowitym brakiem wpływu na objawy pacjenta", correct: false }
+        ],
+        explanation: "Radioterapia paliatywna zakłada zahamowanie rozwoju nowotworu, zmniejszenie objawów (np. bólu) i przedłużenie życia pacjenta, ale nie wpływa na trwałe odwrócenie i wyleczenie procesu nowotworowego."
+    },
+    {
+        question: "Jaki jest główny cel wykonania badania HISTOPATOLOGICZNEGO na etapie rozpoznania?",
+        options: [
+            { text: "Klasyfikacja zmiany, ocena złośliwości i ostateczny stan zaawansowania", correct: true },
+            { text: "Matematyczne obliczenie kątów padania wiązek w akceleratorze", correct: false },
+            { text: "Wyznaczenie gęstości elektronowej tkanki płucnej", correct: false },
+            { text: "Wykonanie indywidualnej maski termoplastycznej", correct: false }
+        ],
+        explanation: "Badanie histopatologiczne tkanek pozwala sklasyfikować typ nowotworu, ocenić stopień jego złośliwości (grading) oraz ostatecznie ustalić stopień zaawansowania choroby (staging)."
+    },
+    {
+        question: "Które badanie NIE należy do badań diagnostycznych wymienionych w etapie rozpoznania?",
+        options: [
+            { text: "Elektrokardiografia (EKG)", correct: true },
+            { text: "Rentgenowska tomografia komputerowa (TK)", correct: false },
+            { text: "Tomografia magnetycznego rezonansu jądrowego (MR)", correct: false },
+            { text: "Scyntygrafia i ultrasonografia (USG)", correct: false }
+        ],
+        explanation: "W etapie rozpoznania wymieniono RTG, TK, mammografię, MR, scyntygrafię i USG. EKG nie jest metodą diagnostyki obrazowej służącą do wyznaczania guza."
+    },
+    {
+        question: "Co jest głównym celem radioterapii RADYKALNEJ na etapie decyzji terapeutycznej?",
+        options: [
+            { text: "Całkowite wyeliminowanie guza (kontroli miejscowej)", correct: true },
+            { text: "Wyłącznie łagodzenie objawów u pacjentów bez szans na wyleczenie", correct: false },
+            { text: "Zmniejszenie liczby badań kontrolnych po leczeniu", correct: false },
+            { text: "Umożliwienie rezygnacji z marginesów tkanek napromienianych", correct: false }
+        ],
+        explanation: "Celem leczenia radykalnego jest całkowite zniszczenie nowotworu w miejscu jego wyjścia i obszarze spływu chłonnego, czyli uzyskanie tzw. kontroli miejscowej."
+    },
+    {
+        question: "Co oznacza skrót GTV w procedurze lokalizacji objętości tarczowych?",
+        options: [
+            { text: "Gross Tumour Volume (całkowita/widoczna objętość guza)", correct: true },
+            { text: "General Target Verification (ogólna weryfikacja tarczy)", correct: false },
+            { text: "Gradual Tissue Volume (objętość tkanki stopniowej)", correct: false },
+            { text: "Guaranteed Therapy Value (gwarantowana wartość dawki)", correct: false }
+        ],
+        explanation: "GTV (Gross Tumour Volume) to wyczuwalny lub widoczny w badaniach obrazowych zakres narośli guza pierwotnego i ewentualnych bezpośrednich przerzutów."
+    },
+    {
+        question: "Czym różni się kliniczna objętość tarczowa (CTV) od całkowitej objętości guza (GTV)?",
+        options: [
+            { text: "CTV to GTV powiększone o obszar niewykrywalnych mikrorozsiewów", correct: true },
+            { text: "CTV to obszar mniejszy od GTV ograniczony tylko do martwicy guza", correct: false },
+            { text: "CTV oznacza wyłącznie narządy zdrowe objęte osłonami ołowianymi", correct: false },
+            { text: "CTV to obszar wyznaczany dopiero po zakończeniu naświetlań", correct: false }
+        ],
+        explanation: "Kliniczna objętość tarczowa (CTV - Clinical Target Volume) to całkowita objętość guza (GTV) powiększona o przyległą objętość, w której występują mikrorozsiewy w fazie klinicznie niewykrywalnej."
+    },
+    {
+        question: "Której objętości w radioterapii należy podać uprzednio zaplanowaną dawkę terapeutyczną?",
+        options: [
+            { text: "Klinicznej objętości tarczowej (CTV)", correct: true },
+            { text: "Wyłącznie obszarom narządów krytycznych", correct: false },
+            { text: "Objętości obejmującej całe ciało pacjenta", correct: false },
+            { text: "Obszarowi wyznaczonemu wyłącznie w badaniu fizykalnym", correct: false }
+        ],
+        explanation: "Zgodnie z zasadami radioterapii, kliniczna objętość tarczowa (CTV) jest tą objętością, której należy podać zaplanowaną dawkę terapeutyczną, aby zniszczyć także mikrorozsiewy."
+    },
+    {
+        question: "Do czego na etapie planowania wykorzystuje się przekroje tomograficzne pacjenta?",
+        options: [
+            { text: "Do uzyskania danych anatomicznych i rozkładu gęstości tkanek", correct: true },
+            { text: "Do bezpośredniej dozymetrii in vivo w trakcie napromieniania", correct: false },
+            { text: "Do fizycznego unieruchomienia pacjenta na stole", correct: false },
+            { text: "Do pomiaru stężenia izotopów otwartych w moczu", correct: false }
+        ],
+        explanation: "Przekroje tomograficzne służą do określenia geometrii tkanek oraz ich gęstości (np. gęstości tkanki miękkiej, kostnej, płucnej), co jest niezbędne do komputerowego obliczenia rozkładu dawek."
+    },
+    {
+        question: "Czym są tzw. \"obszary krytyczne\" uwzględniane w planowaniu leczenia?",
+        options: [
+            { text: "Tkankami zdrowymi o szczególnej promienioczułości i ryzyku powikłań", correct: true },
+            { text: "Miejscami o największym zagęszczeniu komórek nowotworowych", correct: false },
+            { text: "Strefami na ciele pacjenta przeznaczonymi do nacięcia chirurgicznego", correct: false },
+            { text: "Elementami zasilania akceleratora megawoltowego", correct: false }
+        ],
+        explanation: "Obszary krytyczne (narządy krytyczne) to zdrowe tkanki i narządy sąsiadujące z guzem, które charakteryzują się wysoka wrażliwością na promieniowanie i wymagają szczególnej ochrony."
+    },
+    {
+        question: "Na czym polega TELERADIOTERAPIA?",
+        options: [
+            { text: "Na leczeniu wiązkami zewnętrznymi ze źródła oddalonego od pacjenta", correct: true },
+            { text: "Na umieszczaniu źródeł promieniotwórczych wewnątrz tkanki guza", correct: false },
+            { text: "Na doustnym podawaniu płynnych roztworów radioizotopowych", correct: false },
+            { text: "Na naświetlaniu pacjenta falami radiowymi o niskiej częstotliwości", correct: false }
+        ],
+        explanation: "Teleradioterapia (z gr. tele = daleko) to leczenie za pomocą wiązek promieniowania generowanych w aparacie (np. akceleratorze) znajdującym się poza ciałem pacjenta."
+    },
+    {
+        question: "Na czym polega BRACHYTERAPIA?",
+        options: [
+            { text: "Na leczeniu za pomocą źródeł śródtkankowych lub aplikatorów", correct: true },
+            { text: "Na napromienianiu z odległości 1 metra za pomocą wiązki zewnętrznej", correct: false },
+            { text: "Na chirurgicznym wycinaniu guza pod mikroskopem", correct: false },
+            { text: "Na podawaniu radiofarmaceutyków dożylnie w jednorazowym wlewie", correct: false }
+        ],
+        explanation: "Brachyterapia (z gr. brachys = krótki) polega na umieszczeniu źródła promieniotwórczego bezpośrednio w guz dooczenie lub w jego bezpośrednim sąsiedztwie (śródtkankowo lub aplikatorowo)."
+    },
+    {
+        question: "Co charakteryzuje TERAPIĘ RADIOIZOTOPOWĄ?",
+        options: [
+            { text: "Stosowanie otwartych źródeł radioizotopowych podawanych pacjentowi", correct: true },
+            { text: "Stosowanie wiązek promieniowania X z akceleratora liniowego", correct: false },
+            { text: "Miejscowe zamrażanie tkanki nowotworowej cieczami promieniotwórczymi", correct: false },
+            { text: "Użycie wyłącznie promieniowania podczerwonego i ultrafioletowego", correct: false }
+        ],
+        explanation: "Terapia radioizotopowa opiera się na otwartych źródłach promieniotwórczych podawanych pacjentowi (np. doustnie lub dożylnie), które celowanie gromadzą się w tkankach nowotworowych."
+    },
+    {
+        question: "Czym jest SYMULATOR w procedurze radioterapii?",
+        options: [
+            { text: "Aparatem RTG dokładnie odwzorowującym geometrię aparatu leczniczego", correct: true },
+            { text: "Programem komputerowym do tworzenia modeli 3D pacjenta", correct: false },
+            { text: "Fantomem manekina służącym do kalibracji dawek", correct: false },
+            { text: "Sztucznym izotopem wyemitowanym przed rozpoczęciem leczenia", correct: false }
+        ],
+        explanation: "Symulator to diagnostyczny aparat rentgenowski o geometrii i ruchach dokładnie odpowiadających aparatowi do teleradioterapii. Służy do weryfikacji planu przed właściwym naświetlaniem."
+    },
+    {
+        question: "Jaki jest główny cel etapu SYMULACJI?",
+        options: [
+            { text: "Potwierdzenie topometrii pacjenta oraz poprawności osłon i planu", correct: true },
+            { text: "Zniszczenie komórek nowotworowych pierwszą dawką 2 Gy", correct: false },
+            { text: "Pobranie wycinka do badania histopatologicznego", correct: false },
+            { text: "Zmierzanie dokładnego stężenia hemoglobiny we krwi", correct: false }
+        ],
+        explanation: "Symulacja pozwala sprawdzić poprawność planu na ciele ułożonego pacjenta, potwierdzić topometrię oraz właściwy układ osłon i elementów unieruchamiających przed podaniem dawki terapeutycznej."
+    },
+    {
+        question: "Dlaczego wykonuje się INDYWIDUALNE elementy pomocnicze (np. maski, bloki)?",
+        options: [
+            { text: "Aby zapewnić powtarzalność ułożenia pacjenta i warunków napromieniania", correct: true },
+            { text: "Aby całkowicie wyeliminować potrzebę stosowania tomografii", correct: false },
+            { text: "Aby skrócić czas teleradioterapii z 6 tygodni do 2 dni", correct: false },
+            { text: "Aby umożliwić naświetlanie pacjenta w pozycji stojącej", correct: false }
+        ],
+        explanation: "Elementy pomocnicze (np. unieruchomienia, bloki) wykonuje się tak, aby zapewnić idealną powtarzalność ułożenia pacjenta i powtarzalność warunków geometrycznych podczas każdej frakcji."
+    },
+    {
+        question: "Jaki jest standardowy schemat frakcjonowania w teleradioterapii wiązkami zewnętrznymi?",
+        options: [
+            { text: "Ok. 6 tygodni: ok. 60 Gy w 30 frakcjach po 2 Gy (5 dni w tygodniu)", correct: true },
+            { text: "Ok. 2 tygodnie: 30 Gy w 60 frakcjach po 0.5 Gy (7 dni w tygodniu)", correct: false },
+            { text: "Jednorazowa dawka 60 Gy podawana w ciągłym wlewie przez 24h", correct: false },
+            { text: "Ok. 12 tygodni: 120 Gy w 10 frakcjach podawanych co dwa tygodnie", correct: false }
+        ],
+        explanation: "Standardowa teleradioterapia trwa typowo ok. 6 tygodni. Guz napromieniany jest łączną dawką ok. 60 Gy podzieloną na 30 frakcji po 2 Gy, podawanych przez 5 dni roboczych w tygodniu."
+    },
+    {
+        question: "Jakie dawkowanie stosuje się typowo w BRACHYTERAPII w porównaniu do teleradioterapii?",
+        options: [
+            { text: "Mniejszą liczbę frakcji i większą dawkę frakcyjną", correct: true },
+            { text: "Większą liczbę frakcji i bardzo małą dawkę frakcyjną", correct: false },
+            { text: "Identyczne 30 frakcji po 2 Gy jak przy wiązkach zewnętrznych", correct: false },
+            { text: "Wyłącznie dawkę ułamkową podawaną bezprzerwowo przez rok", correct: false }
+        ],
+        explanation: "W brachyterapii ze względu na bezpośrednie sąsiedztwo źródła promieniowania stosuje się odmienne schematy – z reguły charakteryzujące się mniejszą liczbą frakcji, ale większą dawką frakcyjną."
+    },
+    {
+        question: "W jaki sposób najczęściej podaje się porcję izotopu w TERAPII RADIOIZOTOPOWEJ?",
+        options: [
+            { text: "Zwykle jednorazowo", correct: true },
+            { text: "W 30 frakcjach codziennie przez 6 tygodni", correct: false },
+            { text: "W postaci ciągłej naświetlaniowej przez 100 dni", correct: false },
+            { text: "W postaci mikrodawek aplikowanych co godzinę przez tydzień", correct: false }
+        ],
+        explanation: "W terapii radioizotopowej (np. jodem promieniotwórczym I-131) porcję radioizotopu podaje się zazwyczaj jednorazowo."
+    },
+    {
+        question: "Czym jest DOZYMETRIA IN VIVO i w jakim celu się ją przeprowadza?",
+        options: [
+            { text: "Pomiarem na ciele pacjenta sprawdzającym, czy otrzymał zaplanowaną dawkę", correct: true },
+            { text: "Pomiarem gęstości narządów w tomografii komputerowej", correct: false },
+            { text: "Testem laboratoryjnym sprawdzającym poziom płytek krwi", correct: false },
+            { text: "Kalibracją fabryczną głowicy akceleratora przed dostawą do szpitala", correct: false }
+        ],
+        explanation: "Dozymetria in vivo (\"na żywym organizmie\") polega na umieszczeniu detektorów bezpośrednio na ciele pacjenta podczas seansu, aby zweryfikować, czy dostarczona dawka jest zgodna z planem."
+    },
+    {
+        question: "Co oznacza, że proces radioterapii jest \"procesem dynamicznym\"?",
+        options: [
+            { text: "Że odpowiedź guza i stan pacjenta mogą wymusić zmianę schematu leczenia", correct: true },
+            { text: "Że stół z pacjentem musi przemieszczać się w trakcie naświetlania", correct: false },
+            { text: "Że dawka promieniowania ulega podwojeniu z każdą minutą seansu", correct: false },
+            { text: "Że pacjent musi wykonywać ćwiczenia fizyczne podczas terapii", correct: false }
+        ],
+        explanation: "Radioterapia jest procesem dynamicznym: odpowiedź guza na dawkę oraz tolerancja tkankowa pacjenta mogą narzucić konieczność modyfikacji przyjętego wcześniej planu i schematu leczenia."
+    },
+    {
+        question: "Co oprócz obserwacji klinicznej pomaga w ocenie pacjenta jako czynniki prognostyczne?",
+        options: [
+            { text: "Wskaźniki biochemiczne", correct: true },
+            { text: "Kąty obrotu gantry w symulatorze", correct: false },
+            { text: "Liczba zużytych bloków ołowianych", correct: false },
+            { text: "Czas wykonywania zdjęcia RTG", correct: false }
+        ],
+        explanation: "W dynamicznej ocenie przebiegu leczenia pacjenta, oprócz obserwacji objawów klinicznych, coraz większą rolę odgrywają wskaźniki biochemiczne stanowiące czynniki prognostyczne."
+    },
+    {
+        question: "Co jest głównym celem badań KONTROLNYCH po zakończeniu napromieniania?",
+        options: [
+            { text: "Udokumentowanie wyleczenia miejscowego i ocena uszkodzenia tkanek zdrowych", correct: true },
+            { text: "Ponowne wykonanie symulacji na symulatorze rentgenowskim", correct: false },
+            { text: "Wykonanie nowej maski unieruchamiającej dla pacjenta", correct: false },
+            { text: "Podanie pierwszej frakcji leczenia adjuwantowego", correct: false }
+        ],
+        explanation: "Badania kontrolne po zakończeniu radioterapii służą udokumentowaniu stopnia regresji guza (wyleczenia miejscowego) oraz ocenie odczynów i uszkodzeń w obrębie tkanek zdrowych."
+    },
+    {
+        question: "Co według dostarczonego materiału jest czynnikiem WARUNKUJĄCYM POSTĘP w radioterapii?",
+        options: [
+            { text: "Staranna dokumentacja całego przebiegu leczenia i badań kontrolnych", correct: true },
+            { text: "Rezygnacja z wyznaczania obszarów krytycznych tkanek zdrowych", correct: false },
+            { text: "Zastąpienie teleradioterapii wyłącznie leczeniem farmakologicznym", correct: false },
+            { text: "Stosowanie jednakowej dawki u wszystkich pacjentów bez wyjątku", correct: false }
+        ],
+        explanation: "W podsumowaniu materiału podkreślono, że staranna dokumentacja całego procesu radioterapii oraz późniejszych badań kontrolnych stanowi kluczowy warunek postępu naukowego i klinicznego w tej dziedzinie."
+    },
+    {
+        question: "Jaki procent wyleczeń nowotworów daje SAMODZIELNA chemioterapia według statystyk?",
+        options: [
+            { text: "5%", correct: true },
+            { text: "18%", correct: false },
+            { text: "22%", correct: false },
+            { text: "60%", correct: false }
+        ],
+        explanation: "Zgodnie z danymi zaprezentowanymi w wykresie materiału, wyleczenie za pomocą samodzielnego leczenia chemioterapeutycznego uzyskuje się u 5% pacjentów."
     }
 ];
-
-// Flat list of all questions for logic processing
-const allQuestions = [];
-quizSections.forEach(section => {
-    section.questions.forEach(q => allQuestions.push(q));
-});
-
-const helpUsed = {};
-const answeredQuestions = {};
 
 function shuffleArray(array) {
     const arr = [...array];
@@ -813,169 +629,110 @@ function shuffleArray(array) {
     return arr;
 }
 
-function escapeHtml(text) {
-    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
+let userProgress = {
+    answered: 0,
+    score: 0
+};
 
 function renderQuiz() {
     const container = document.getElementById('quiz-container');
     container.innerHTML = '';
+    userProgress.answered = 0;
+    userProgress.score = 0;
+    updateStats();
 
-    quizSections.forEach((section) => {
-        const sectionHeader = document.createElement('div');
-        sectionHeader.className = 'section-header';
-        sectionHeader.textContent = section.title;
-        container.appendChild(sectionHeader);
+    quizData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
 
-        section.questions.forEach((q) => {
-            helpUsed[q.id] = false;
-            answeredQuestions[q.id] = false;
+        // Question header
+        const header = document.createElement('div');
+        header.className = 'question-header';
 
-            const shuffledOptions = shuffleArray(q.options);
+        const numBadge = document.createElement('div');
+        numBadge.className = 'question-number';
+        numBadge.innerText = `Pytanie ${index + 1}`;
 
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            card.id = `q-card-${q.id}`;
+        const qText = document.createElement('div');
+        qText.className = 'question-text';
+        qText.innerText = item.question;
 
-            let optionsHTML = '';
-            shuffledOptions.forEach((opt, optIndex) => {
-                optionsHTML += `
-                    <li class="option-item" id="opt-item-${q.id}-${optIndex}">
-                        <label class="option-label">
-                            <input type="radio" name="q${q.id}" value="${opt.correct}" data-opt-id="${optIndex}" onchange="handleSelectOption(${q.id}, this)">
-                            <span>${escapeHtml(opt.text)}</span>
-                        </label>
-                    </li>
-                `;
-            });
+        header.appendChild(numBadge);
+        header.appendChild(qText);
+        card.appendChild(header);
 
-            const correctOpt = q.options.find(o => o.correct);
+        // Options container
+        const optionsList = document.createElement('div');
+        optionsList.className = 'options-list';
 
-            card.innerHTML = `
-                <div class="question-title">Pytanie ${q.id}. ${escapeHtml(q.question)}</div>
-                <ul class="options-list" id="options-list-${q.id}">
-                    ${optionsHTML}
-                </ul>
-                <div class="help-container">
-                    <button type="button" class="help-btn" id="help-btn-${q.id}" onclick="useHelp(${q.id})">
-                        💡 Pomóż (Odrzuć 1 błędną)
-                    </button>
-                    <span class="help-text" id="help-text-${q.id}"></span>
-                </div>
-                <div class="feedback-box" id="feedback-${q.id}">
-                    <div id="feedback-msg-${q.id}"></div>
-                    <div style="margin-top: 5px;"><strong>Prawidłowa odpowiedź:</strong> ${escapeHtml(correctOpt.text)}</div>
-                </div>
-            `;
+        // Shuffle options for this render
+        const shuffledOptions = shuffleArray(item.options);
 
-            container.appendChild(card);
+        // Explanation container
+        const explanationDiv = document.createElement('div');
+        explanationDiv.className = 'explanation-box';
+        explanationDiv.id = `explanation-${index}`;
+
+        shuffledOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => handleAnswer(index, btn, opt.correct, item.explanation, optionsList);
+            optionsList.appendChild(btn);
         });
+
+        card.appendChild(optionsList);
+        card.appendChild(explanationDiv);
+        container.appendChild(card);
     });
 }
 
-function handleSelectOption(questionId, inputElement) {
-    answeredQuestions[questionId] = true;
+function handleAnswer(qIndex, selectedBtn, isCorrect, explanationText, optionsContainer) {
+    const allButtons = optionsContainer.querySelectorAll('.option-btn');
+    
+    // Disable all options in this card after selection
+    allButtons.forEach(btn => btn.disabled = true);
 
-    const isCorrect = inputElement.value === 'true';
-    const list = document.getElementById(`options-list-${questionId}`);
-    const items = list.querySelectorAll('.option-item');
-    const feedbackBox = document.getElementById(`feedback-${questionId}`);
-    const feedbackMsg = document.getElementById(`feedback-msg-${questionId}`);
+    const expDiv = document.getElementById(`explanation-${qIndex}`);
 
-    // Lock all inputs for this question to prevent changing answer
-    items.forEach(item => {
-        const inp = item.querySelector('input');
-        inp.disabled = true;
+    userProgress.answered += 1;
 
-        if (inp.value === 'true') {
-            item.classList.add('correct-answer');
-        }
-    });
-
-    if (!isCorrect) {
-        const selectedItem = inputElement.closest('.option-item');
-        selectedItem.classList.add('wrong-answer');
-        feedbackBox.className = 'feedback-box incorrect';
-        feedbackMsg.innerHTML = '❌ <strong>Nieprawidłowa odpowiedź!</strong>';
+    if (isCorrect) {
+        userProgress.score += 1;
+        selectedBtn.classList.add('correct');
+        expDiv.className = 'explanation-box visible correct-style';
+        expDiv.innerHTML = `<div class="explanation-title">✓ Prawidłowa odpowiedź!</div><p>${explanationText}</p>`;
     } else {
-        feedbackBox.className = 'feedback-box correct';
-        feedbackMsg.innerHTML = '✅ <strong>Prawidłowa odpowiedź!</strong>';
-    }
-
-    // Disable help button after answering
-    const helpBtn = document.getElementById(`help-btn-${questionId}`);
-    if (helpBtn) helpBtn.disabled = true;
-}
-
-function useHelp(questionId) {
-    if (helpUsed[questionId] || answeredQuestions[questionId]) return;
-
-    const list = document.getElementById(`options-list-${questionId}`);
-    const items = list.querySelectorAll('.option-item');
-    const incorrectItems = [];
-
-    items.forEach(item => {
-        const input = item.querySelector('input');
-        if (input.value === 'false' && !item.classList.contains('eliminated')) {
-            incorrectItems.push(item);
-        }
-    });
-
-    if (incorrectItems.length > 0) {
-        const randomIncorrect = incorrectItems[Math.floor(Math.random() * incorrectItems.length)];
-        randomIncorrect.classList.add('eliminated');
-        const input = randomIncorrect.querySelector('input');
-        input.disabled = true;
-
-        helpUsed[questionId] = true;
-
-        const btn = document.getElementById(`help-btn-${questionId}`);
-        btn.disabled = true;
-
-        const helpText = document.getElementById(`help-text-${questionId}`);
-        helpText.textContent = "Użyto pomocy (-0.5 pkt w przypadku poprawnej odpowiedzi)";
-    }
-}
-
-function calculateScore() {
-    let totalScore = 0;
-    const maxScore = allQuestions.length;
-    let answeredCount = 0;
-
-    allQuestions.forEach(q => {
-        const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-
-        if (selected) {
-            answeredCount++;
-            const isCorrect = selected.value === 'true';
-
-            if (isCorrect) {
-                if (helpUsed[q.id]) {
-                    totalScore += 0.5;
-                } else {
-                    totalScore += 1.0;
-                }
+        selectedBtn.classList.add('incorrect');
+        
+        // Highlight correct option
+        allButtons.forEach(btn => {
+            const originalOption = quizData[qIndex].options.find(o => o.text === btn.innerText);
+            if (originalOption && originalOption.correct) {
+                btn.classList.add('correct');
             }
-        }
-    });
+        });
 
-    if (answeredCount < allQuestions.length) {
-        if (!confirm(`Odpowiedziałeś na ${answeredCount} z ${allQuestions.length} pytań. Czy na pewno chcesz zakończyć?`)) {
-            return;
-        }
+        expDiv.className = 'explanation-box visible incorrect-style';
+        expDiv.innerHTML = `<div class="explanation-title">✗ Błędna odpowiedź.</div><p>${explanationText}</p>`;
     }
 
-    document.getElementById('score-val').textContent = totalScore;
-    document.getElementById('max-score-val').textContent = maxScore;
-
-    const percent = Math.round((totalScore / maxScore) * 100);
-    document.getElementById('score-summary').textContent = `Twój wynik procentowy to: ${percent}%. Wszystkie pytania mają oznaczone prawidłowe odpowiedzi.`;
-
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.display = 'block';
-    resultDiv.scrollIntoView({ behavior: 'smooth' });
+    updateStats();
 }
 
+function updateStats() {
+    document.getElementById('answered-count').innerText = userProgress.answered;
+    document.getElementById('score-count').innerText = userProgress.score;
+    const progressPercent = (userProgress.answered / quizData.length) * 100;
+    document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+}
+
+function restartQuiz() {
+    renderQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Start quiz on load
 window.onload = renderQuiz;
 </script>
 
